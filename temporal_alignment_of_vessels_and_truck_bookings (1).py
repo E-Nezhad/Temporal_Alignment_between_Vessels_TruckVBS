@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-"""Temporal Alignment of Vessels and Truck Bookings.ipynb
+
+"""
+Temporal Alignment between Truck Booking Timeslots and Vessel Schedules, Elnaz (Elli) Irannezhad
 """
 
 pip install pandas numpy scipy statsmodels matplotlib openpyxl
@@ -19,7 +20,7 @@ INPUT_FILE  = "PortBotany_ARDL_Paper.xlsx"
 OUTPUT_DIR  = "results"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Vessel–truck pairing: which vessel event to test each truck type against
+# Vessel–truck pairing: which vessel event to test each truck booking type against
 PAIRINGS = {
     "IMPORT":  "Arrival",
     "EXPORT":  "Departure",
@@ -211,16 +212,6 @@ def hourly_ccf(trucks_df, vessel_df, truck_type, vessel_col, max_lag_h=48):
 # RAYLEIGH TEST FOR CIRCULAR NON-UNIFORMITY
 
 def rayleigh_test(angles_rad):
-    """
-    Rayleigh test for uniformity of a circular distribution.
-    H0: angles are uniformly distributed on the circle.
-
-    Returns:
-      R     mean resultant length (0=uniform, 1=concentrated)
-      z     test statistic = n * R²
-      p     p-value (Mardia 1972 approximation)
-      mu_h  mean direction (hours, 0–24)
-    """
     n = len(angles_rad)
     if n == 0:
         return 0.0, 0.0, 1.0, 0.0
@@ -295,7 +286,7 @@ def run_rayleigh(trucks_df, vessel_df, term_name):
 
     return results
 
-# ARDL + DISTRIBUTED LAG + GRANGER CAUSALITY
+# ARDL + DISTRIBUTED LAG & GRANGER CAUSALITY
 def run_ardl(daily, term_name, truck_col, vessel_col, max_lag):
     y     = daily[truck_col].astype(float)
     x     = daily[[vessel_col]].astype(float)
